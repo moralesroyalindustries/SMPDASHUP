@@ -50,10 +50,10 @@ export default function Dashboard({ onExit }: { onExit: () => void }) {
       return;
     }
 
-    const { data: valid } = await supabase.rpc('verify_password', {
+    const { data: valid } = await Promise.resolve(supabase.rpc('verify_password', {
       plain: password,
       hashed: data.password_hash,
-    }).then((r) => r).catch(() => ({ data: null }));
+    })).catch(() => ({ data: null }));
 
     if (valid) {
       sessionStorage.setItem(SESSION_KEY, '1');

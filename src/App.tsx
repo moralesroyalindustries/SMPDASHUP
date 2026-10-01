@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { business, gallery, productFormats, products } from '@/data/businessData';
 import Dashboard from '@/Dashboard';
+import { isSupabaseConfigured } from '@/lib/supabase';
 
 type Language = 'es' | 'en';
 
@@ -68,6 +69,7 @@ function App() {
 
   useEffect(() => { document.documentElement.lang = language; }, [language]);
   useEffect(() => {
+    if (!isSupabaseConfigured) return;
     fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/track-visit`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
