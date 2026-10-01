@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { ArrowLeft, Eye, Globe, TrendingUp, Calendar, LogOut, Lock } from 'lucide-react';
 
 type VisitRow = {
@@ -36,6 +36,12 @@ export default function Dashboard({ onExit }: { onExit: () => void }) {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoginError('');
+
+    if (!isSupabaseConfigured) {
+      setLoginError('El acceso no está configurado: faltan las variables VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY en Netlify.');
+      return;
+    }
+
     setLoading(true);
 
     const { data, error } = await supabase
@@ -44,7 +50,13 @@ export default function Dashboard({ onExit }: { onExit: () => void }) {
       .eq('username', username.trim())
       .single();
 
-    if (error || !data) {
+    if (error && error.code !== 'PGRST116') {
+      setLoginError('No se pudo conectar con el servidor. Inténtalo de nuevo más tarde.');
+      setLoading(false);
+      return;
+    }
+
+    if (!data) {
       setLoginError('Usuario o contraseña incorrectos');
       setLoading(false);
       return;
