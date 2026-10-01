@@ -2,6 +2,11 @@
   command = "npm run build"
   publish = "dist"
 
+# Public Supabase client config (anon key is safe to expose; it ships in the browser bundle)
+[build.environment]
+  VITE_SUPABASE_URL = "https://ovvmjaznbtfvtolalcxu.supabase.co"
+  VITE_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im92dm1qYXpuYnRmdnRvbGFsY3h1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4Nzg1MzUsImV4cCI6MjEwNjQ1NDUzNX0.q6Mqxlvi09RZ1MMySOhGWGMiWxMpAS-1tCtBaiTo-YQ"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
